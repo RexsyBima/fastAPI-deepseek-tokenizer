@@ -31,14 +31,10 @@ class TokenizerInput(BaseModel):
 
 @app.post("/encode", status_code=status.HTTP_200_OK, response_model=Tokenizer)
 async def encode_tokenizer(input_data: TokenizerInput):
-    text = input_data.text
-    assert isinstance(text, str), "text header is empty, please set it"
-    data = encode_text(text)
+    data = encode_text(input_data.text)
     return data
 
 @app.post("/encode_transformer", status_code=status.HTTP_200_OK, response_model=Tokenizer)
 async def encode_transformer(input_data: TokenizerInput):
-    text = input_data.text
-    assert isinstance(text, str), "text header is empty, please set it"
-    encoded_text = tokenizer.encode(text)
-    return Tokenizer(original_text=text, encoded_text=encoded_text, token_length=len(encoded_text))
+    encoded_text = tokenizer.encode(input_data)
+    return Tokenizer(original_text=input_data.text, encoded_text=encoded_text, token_length=len(encoded_text))
